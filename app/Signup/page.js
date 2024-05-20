@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import Link  from "next/link";
 import {
   Form,
   FormControl,
@@ -13,9 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link  from "next/link";
 
 const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
   email : z.string().email({
     message: "Email is not valid.",
   }),
@@ -24,7 +27,7 @@ const formSchema = z.object({
   } ),
 });
 
-const LoginForm = () => {
+const SignupForm = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,9 +42,23 @@ const LoginForm = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 ">
       <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-2xl font-semibold mb-6 font-extrabold">Login Form</h1>
+        <h1 className="text-2xl font-semibold mb-6 font-extrabold">Signup Form</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your username" {...field} />
+                  </FormControl>
+                  <FormDescription>This is your public display name.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -70,9 +87,9 @@ const LoginForm = () => {
               )}
             />
             <div>
-              <span>Don't have an account?  <Link href="/Signup" className="text-blue-500 font-bold text-lg">Signup </Link> </span>
+              <span>Already have an account?  <Link href="/Login" className="text-blue-500 font-bold text-lg">Login </Link> </span>
             </div>
-            <Button type="submit" className="mt-4" >Login </Button>
+            <Button type="submit" className="mt-4" >Signup </Button>
           </form>
         </Form>
       </div>
@@ -80,4 +97,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
