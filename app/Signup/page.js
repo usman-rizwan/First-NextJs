@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from 'axios'
+import { connectToDB } from '@/db/dbConfig'
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -35,14 +37,23 @@ const SignupForm = () => {
     },
   });
 
-  function onSubmit(values) {
+  const onSubmit = async (values) => {
+    try {
+      const response = await axios.post(" /api/users/signup", values);
+      console.log(  "response===>" , response);
+    } catch (error) {
+      console.log("error===>" , error);
+    }
+    // connectToDB();
     console.log(values);
+
+  form.reset({ email: "" } ,  { username: "" } , { password: "" });
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 ">
       <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-2xl font-semibold mb-6 font-extrabold">Signup Form</h1>
+        <h1 className="text-2xl  mb-6 font-extrabold">Signup Form</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
@@ -87,7 +98,7 @@ const SignupForm = () => {
               )}
             />
             <div>
-              <span>Already have an account?  <Link href="/Login" className="text-blue-500 font-bold text-lg">Login </Link> </span>
+              <span>Already have an account?  <Link href="/login" className="text-blue-500 font-bold text-lg">Login </Link> </span>
             </div>
             <Button type="submit" className="mt-4" >Signup </Button>
           </form>

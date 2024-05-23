@@ -13,35 +13,46 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link  from "next/link";
+import Link from "next/link";
 
 const formSchema = z.object({
-  email : z.string().email({
+  email: z.string().email({
     message: "Email is not valid.",
   }),
   password: z.string().trim().min(6, {
     message: "Password must be at least 6 characters.",
-  } ),
+  }),
 });
 
 const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
 
-  function onSubmit(values) {
+  async function onSubmit(values) {
+    try {
+      const response = await axios.post(" /api/users/signup", values);
+      console.log("response===>", response);
+      form.reset({ email: "" }, { password: "" });
+    } catch (error) {
+      console.log("error===>", error);
+    }
     console.log(values);
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 ">
       <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-2xl font-semibold mb-6 font-extrabold">Login Form</h1>
+        <h1 className="text-2xl mb-6 font-extrabold">Login Form</h1>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -51,7 +62,9 @@ const LoginForm = () => {
                   <FormControl>
                     <Input placeholder="Enter your email address" {...field} />
                   </FormControl>
-                  <FormDescription>This is your public display email address.</FormDescription>
+                  <FormDescription>
+                    This is your public display email address.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -63,16 +76,30 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your password" {...field} type="password" />
+                    <Input
+                      placeholder="Enter your password"
+                      {...field}
+                      type="password"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div>
-              <span>Don't have an account?  <Link href="/Signup" className="text-blue-500 font-bold text-lg">Signup </Link> </span>
+              <span>
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-blue-500 font-bold text-lg"
+                >
+                  Signup{" "}
+                </Link>{" "}
+              </span>
             </div>
-            <Button type="submit" className="mt-4" >Login </Button>
+            <Button type="submit" className="mt-4">
+              Login{" "}
+            </Button>
           </form>
         </Form>
       </div>
