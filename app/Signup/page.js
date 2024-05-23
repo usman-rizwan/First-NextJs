@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from 'axios'
-import { connectToDB } from '@/db/dbConfig'
+import  {useState}  from "react";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -30,18 +30,23 @@ const formSchema = z.object({
 });
 
 const SignupForm = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      password: "",
     },
   });
 
   const onSubmit = async (values) => {
     try {
+      setLoading(true);
       const response = await axios.post(" /api/users/signup", values);
       console.log(  "response===>" , response);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log("error===>" , error);
     }
     // connectToDB();
@@ -100,7 +105,7 @@ const SignupForm = () => {
             <div>
               <span>Already have an account?  <Link href="/login" className="text-blue-500 font-bold text-lg">Login </Link> </span>
             </div>
-            <Button type="submit" className="mt-4" >Signup </Button>
+            <Button type="submit" className="mt-4" disabled={loading} > {loading ? "Loading..." : "Signup "} </Button>
           </form>
         </Form>
       </div>

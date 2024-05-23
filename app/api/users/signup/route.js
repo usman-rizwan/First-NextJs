@@ -2,7 +2,6 @@ import  {connectToDB}  from "../../../../db/dbConfig";
 import User from "../../../../db/UserModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-
 connectToDB();
 
 export async function POST(req) {

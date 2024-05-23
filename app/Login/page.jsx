@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import axios from "axios";
+import  {useState}  from "react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -25,6 +27,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,10 +38,13 @@ const LoginForm = () => {
 
   async function onSubmit(values) {
     try {
-      const response = await axios.post(" /api/users/signup", values);
-      console.log("response===>", response);
+      setLoading(true);
+      const response = await axios.post("/api/users/login", values);
+      console.log("response===>", response.data);
       form.reset({ email: "" }, { password: "" });
+        setLoading(false);
     } catch (error) {
+        setLoading(false);
       console.log("error===>", error);
     }
     console.log(values);
@@ -88,17 +94,17 @@ const LoginForm = () => {
             />
             <div>
               <span>
-                Don't have an account?{" "}
+                Don't have an account?
                 <Link
                   href="/signup"
                   className="text-blue-500 font-bold text-lg"
                 >
-                  Signup{" "}
-                </Link>{" "}
+                  Signup
+                </Link>
               </span>
             </div>
-            <Button type="submit" className="mt-4">
-              Login{" "}
+            <Button type="submit" className="mt-4" disabled={loading} >
+              {loading ? "Loading..." : "Login"}
             </Button>
           </form>
         </Form>
