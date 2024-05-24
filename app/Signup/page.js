@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from 'axios'
 import  {useState}  from "react";
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -31,6 +32,7 @@ const formSchema = z.object({
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,6 +47,7 @@ const SignupForm = () => {
       const response = await axios.post(" /api/users/signup", values);
       console.log(  "response===>" , response);
       setLoading(false);
+      router.push("/Home");
     } catch (error) {
       setLoading(false);
       console.log("error===>" , error);

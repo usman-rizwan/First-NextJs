@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import axios from "axios";
 import  {useState}  from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,6 +45,7 @@ const LoginForm = () => {
       console.log("response===>", response.data);
       form.reset({ email: "" }, { password: "" });
         setLoading(false);
+        router.push("/Home");
     } catch (error) {
         setLoading(false);
       console.log("error===>", error);
