@@ -44,10 +44,10 @@ const SignupForm = () => {
   const onSubmit = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post(" /api/users/signup", values);
+      const response = await axios.post("/api/users/signup", values);
       console.log(  "response===>" , response);
       setLoading(false);
-      router.push("/Home");
+      router.push("/home");
     } catch (error) {
       setLoading(false);
       console.log("error===>" , error);

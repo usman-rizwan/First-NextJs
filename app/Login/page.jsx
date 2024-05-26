@@ -45,7 +45,7 @@ const LoginForm = () => {
       console.log("response===>", response.data);
       form.reset({ email: "" }, { password: "" });
         setLoading(false);
-        router.push("/Home");
+        router.push("/home");
     } catch (error) {
         setLoading(false);
       console.log("error===>", error);
