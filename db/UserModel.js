@@ -15,6 +15,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    forgotPasswordToken : String ,
+    forgotPasswordTokenExpiry : String , 
+    verifyPasswordToken : String ,
+    verifyPasswordTokenExpiry : String ,
   },
   {
     timestamps: true,
