@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const { Schema , model , models } = mongoose;
+const { Schema, model, models } = mongoose;
 const userSchema = new Schema(
   {
     name: {
@@ -15,10 +15,14 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    forgotPasswordToken : String ,
-    forgotPasswordTokenExpiry : String , 
-    verifyPasswordToken : String ,
-    verifyPasswordTokenExpiry : String ,
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    forgotPasswordToken: String,
+    forgotPasswordTokenExpiry: String,
+    verifyPasswordToken: String,
+    verifyPasswordTokenExpiry: String,
   },
   {
     timestamps: true,
