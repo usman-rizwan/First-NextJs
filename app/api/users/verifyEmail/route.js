@@ -21,7 +21,8 @@ export async function POST(req) {
     user.isVerified = true;
     user.verifyPasswordToken = null;
     user.verifyPasswordTokenExpiry = null;
-    await user.save();
+   const savedUser =  await user.save();
+   return NextResponse.json({ message: "Email verified" , savedUser } ,{status:200});
   } catch (error) {
     console.log(error);
   }

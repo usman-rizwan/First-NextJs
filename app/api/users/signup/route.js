@@ -3,6 +3,7 @@ import User from "../../../../db/UserModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import sendEmail from "@/helpers/mailer";
 
 connectToDB();
 
@@ -34,6 +35,7 @@ export async function POST(req) {
     const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
+    await sendEmail({email , emailType:"verify" , userId : savedUser._id})
 
     const response = NextResponse.json({ message: "User created" , savedUser , token });
     response.cookies.set("token", token ,{ httpOnly: true });

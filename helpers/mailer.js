@@ -1,10 +1,12 @@
 import User from "@/db/UserModel";
-import bcrypt from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import nodemailer from 'nodemailer'
 
-const sendEmail = async (email, emailType, userId) => {
+const sendEmail = async ({email, emailType, userId}) => {
   try {
-    const hashedToken = bcrypt.hash(userId.toString(), 10);
+    console.log("email, emailType, userId ==>" , email, emailType, userId);
+    const hashedToken =await bcryptjs.hash(userId.toString(), 10);
+    console.log("hashedToken->>.",hashedToken);
     if (emailType == "verify") {
       await User.findByIdAndUpdate(userId, {
         verifyPasswordToken: hashedToken,
@@ -29,7 +31,7 @@ const sendEmail = async (email, emailType, userId) => {
         from : 'usmanrizwan771@gmail.com',
         to : email,
         subject : emailType == 'verify' ? 'Verify your account' : 'Reset your password',
-        html : emailType == 'verify' ? `<p>Click on the link to verify your account</p><a href="http://localhost:3000/verifyemail?token=${hashedToken}">http://localhost:3000/verifyemail?token=${hashedToken}</a>` : `<p>Click on the link to reset your password</p><a href="http://localhost:3000/resetpassword?token=${hashedToken}">http://localhost:3000/resetpassword?token=${hashedToken}</a>`
+        html : emailType == 'verify' ? `<p>Click on the link to verify your account</p><a href="http://localhost:3000/verifyemail?token=${hashedToken}">Verify Your Account  <br/> <span>Token Number ${hashedToken} </span></a>` : `<p>Click on the link to reset your password</p><a href="http://localhost:3000/resetpassword?token=${hashedToken}">Reset  Your Password  <br/> <span> Token Number ${hashedToken} </span></a>`
       }
       const mailResponse = await transport.sendMail(mailOptions)
       return mailResponse;
