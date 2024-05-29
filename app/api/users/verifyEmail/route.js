@@ -6,12 +6,12 @@ connectToDB();
 
 export async function POST(req) {
   try {
-    const token = await req.json();
-    console.log(token);
+    const responseToken = await req.json();
+    console.log("verify token ===> " , responseToken.token);
 
     const user = await User.findOne({
-      verifyPasswordToken: token,
-      verifyPasswordTokenexpiry: { $gt: Date.now() },
+      verifyPasswordToken:  responseToken.token,
+      verifyPasswordTokenExpiry: { $gt: Date.now() },
     });
     if (!user) {
         return NextResponse.json({error : "Invalid Token" } , {status:400})
